@@ -64,13 +64,16 @@
 
 @implementation CPDFDocumentViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) != NULL) {
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+    {
+    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) != NULL)
+    {
         _document.delegate = self;
         _renderedPageCache = [[NSCache alloc] init];
         _renderedPageCache.countLimit = 8;
+        _statusBarHidden = YES;
     }
-    return (self);
+    return(self);
 }
 
 #pragma mark -
@@ -171,8 +174,12 @@
     [theSingleTapGestureRecognizer requireGestureRecognizerToFail:theDoubleTapGestureRecognizer];
 }
 
+- (void)setStatusBadHidden:(BOOL)hidden {
+    _statusBarHidden = hidden;
+}
+
 - (BOOL)prefersStatusBarHidden {
-    return YES;
+    return _statusBarHidden;
 }
 
 - (void)setupPreviewCollectionView {

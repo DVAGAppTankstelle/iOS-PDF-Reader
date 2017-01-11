@@ -125,7 +125,7 @@
 
     CGContextDrawPDFPage(context, self.page.cg);
 
-#if 1
+#if 0
 	CGContextSetRGBStrokeColor(context, 1.0,0.0,0.0,1.0);
     CGContextSetLineWidth(context, 0.5);
     CGContextStrokeRect(context, CGPDFPageGetBoxRect(self.page.cg, kCGPDFCropBox));

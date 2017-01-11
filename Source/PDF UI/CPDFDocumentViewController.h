@@ -44,6 +44,7 @@
 @property (readonly, nonatomic, strong) UIPageViewController *pageViewController;
 @property (readwrite, nonatomic, strong) UIView *backgroundView;
 @property (readwrite, nonatomic, assign) BOOL magazineMode;
+@property (nonatomic) BOOL statusBarHidden;
 
 - (BOOL)openPage:(CPDFPage *)inPage;
 - (void)setDocumentTitle:(NSString *)documentTitle;
