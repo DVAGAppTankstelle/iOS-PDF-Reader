@@ -529,7 +529,7 @@
     CPDFPageViewController *theViewController = (CPDFPageViewController *)viewController;
 
     NSUInteger theNextPageNumber = theViewController.page.pageNumber + 1;
-    if (theNextPageNumber > self.document.numberOfPages)
+    if (theNextPageNumber > self.document.numberOfPages || theViewController.page.pageNumber == 0)
         {
         //thealch3m1st: if we are in two page mode and the document has an even number of pages if it would just return NULL it woudln't flip to that last page so we have to return a an empty page for the (number of pages + 1)th page.
             if(self.document.numberOfPages %2 == 0 &&
