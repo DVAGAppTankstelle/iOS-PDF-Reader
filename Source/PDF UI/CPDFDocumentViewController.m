@@ -270,15 +270,20 @@
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [self.renderedPageCache removeAllObjects];
     [self populateCache];
+
+    if([self.delegate respondsToSelector:@selector(didChangeRotation:andThumbnailsVisible:)]) {
+        [self.delegate didChangeRotation:self.currentInterfaceOrientation andThumbnailsVisible:!self.chromeHidden];
+    }
 }
 
 - (void)hideChrome {
     if (!self.chromeHidden) {
         [UIView animateWithDuration:UINavigationControllerHideShowBarDuration animations:^{
-            self.navigationController.navigationBar.alpha = 0.0;
             self.previewCollectionView.alpha = 0.0;
         }                completion:^(BOOL finished) {
             self.chromeHidden = YES;
+
+            [self notifyDidTap];
         }];
     }
 }
@@ -286,11 +291,18 @@
 - (void)toggleChrome {
     [UIView animateWithDuration:UINavigationControllerHideShowBarDuration animations:^{
         CGFloat newAlpha = 1.0f - (self.chromeHidden ? 0.0f : 1.0f);
-        self.navigationController.navigationBar.alpha = newAlpha;
         self.previewCollectionView.alpha = newAlpha;
     }                completion:^(BOOL finished) {
         self.chromeHidden = !self.chromeHidden;
+
+        [self notifyDidTap];
     }];
+}
+
+- (void) notifyDidTap {
+    if([self.delegate respondsToSelector:@selector(didTap:)]) {
+        [self.delegate didTap:!self.chromeHidden];
+    }
 }
 
 - (void)resizePageViewControllerForOrientation:(UIInterfaceOrientation)inOrientation {
