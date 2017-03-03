@@ -35,10 +35,11 @@
 #import "PDFUtilities.h"
 #import "CPDFStream.h"
 
-#import <MediaPlayer/MediaPlayer.h>
+//#import <MediaPlayer/MediaPlayer.h>
+#import <AVKit/AVKit.h>
 
 @interface CPDFAnnotationView ()
-@property (readwrite, nonatomic, strong) MPMoviePlayerController *moviePlayer;
+@property (readwrite, nonatomic, strong) AVPlayer *moviePlayer;
 @end
 
 #pragma mark -
@@ -70,17 +71,19 @@
 
         if (theURL)
             {
-            self.moviePlayer = [[MPMoviePlayerController alloc] initWithContentURL:theURL];
-            self.moviePlayer.view.frame = self.bounds;
-            self.moviePlayer.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-            [self.moviePlayer prepareToPlay];
-            [self addSubview:self.moviePlayer.view];
-
+                self.moviePlayer = [[AVPlayer alloc]initWithURL:theURL];//[[MPMoviePlayerController alloc] initWithContentURL:theURL];
+                AVPlayerViewController* controller = [AVPlayerViewController new];
+                controller.allowsPictureInPicturePlayback = false;
+                controller.player = self.moviePlayer;
+                [controller.view setFrame:self.bounds];
+                
+                
 
             double delayInSeconds = 2.0;
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
 //                [self.moviePlayer play];
+//                [self presentViewController:controller animated:true completion:nil];
                 });
             }
         }

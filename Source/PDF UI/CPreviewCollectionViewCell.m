@@ -22,7 +22,7 @@
         self.imageView = [[UIImageView alloc] init];
         self.imageView.frame = self.frame;
         self.imageView.contentMode = UIViewContentModeScaleAspectFill;
-        [self.viewForBaselineLayout addSubview:self.imageView];
+        [self.viewForLastBaselineLayout addSubview:self.imageView];
     }
     return self;
 }

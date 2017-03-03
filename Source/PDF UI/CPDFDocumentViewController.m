@@ -249,7 +249,7 @@
         // select first cell. Both things are required to get the correct behaviour.
         UICollectionViewCell *cell = [self.previewCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
         [cell setSelected:YES];
-        [self.previewCollectionView selectItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:nil];
+        [self.previewCollectionView selectItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UICollectionViewScrollPositionNone];
     });
 }
 
@@ -415,7 +415,7 @@
     CGRect theBounds = thePageView.bounds;
 
     for (NSInteger thePageNumber = theStartPageNumber; thePageNumber <= theLastPageNumber; ++thePageNumber) {
-        NSString *theKey = [NSString stringWithFormat:@"%d[%d,%d]", thePageNumber, (int) theBounds.size.width, (int) theBounds.size.height];
+        NSString *theKey = [NSString stringWithFormat:@"%d[%d,%d]", (int)thePageNumber, (int) theBounds.size.width, (int) theBounds.size.height];
         if ([self.renderedPageCache objectForKey:theKey] == NULL) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                 UIImage *theImage = [[self.document pageForPageNumber:thePageNumber] imageWithSize:theBounds.size scale:[UIScreen mainScreen].scale];

@@ -72,14 +72,14 @@ for (NSString *theKey in inQueryDictionary)
         for (id subValue in theValue)
             {
             NSString *tempSubValue = [subValue description];
-            [theQueryComponents addObject:[NSString stringWithFormat:@"%@=%@", theKey, [tempSubValue stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+            [theQueryComponents addObject:[NSString stringWithFormat:@"%@=%@", theKey, [tempSubValue stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]]]];
             }
         }
     else
         {
         // this fixes the issue of spaces in values. %@ = [value description]
         NSString *tempValue = [theValue description];
-        [theQueryComponents addObject:[NSString stringWithFormat:@"%@=%@", theKey, [tempValue stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+        [theQueryComponents addObject:[NSString stringWithFormat:@"%@=%@", theKey, [tempValue stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]]]];
         }
 	}
 return([theQueryComponents componentsJoinedByString:@"&"]);
