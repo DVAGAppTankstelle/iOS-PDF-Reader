@@ -437,7 +437,7 @@
         return (NULL);
     }
 
-    if (theNextPageNumber == 0 && UIInterfaceOrientationIsPortrait(self.currentInterfaceOrientation)) {
+    if (theNextPageNumber == 0 && (UIInterfaceOrientationIsPortrait(self.currentInterfaceOrientation) || self.document.numberOfPages == 1)) {
         return (NULL);
     }
 
