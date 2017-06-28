@@ -33,17 +33,24 @@
 
 @class CPDFDocument;
 @class CContentScrollView;
-@class CPreviewBar;
 @class CPDFPage;
+
+@protocol CPDFDocumentViewControllerDelegate <NSObject>
+
+@optional
+- (void)didTap:(BOOL)thumbnailsVisible;
+- (void)didChangeRotation:(UIInterfaceOrientation)orientation andThumbnailsVisible:(BOOL)thumbnailsVisible;
+
+@end
 
 @interface CPDFDocumentViewController : UIViewController
 
+@property (readwrite, nonatomic, weak) id<CPDFDocumentViewControllerDelegate> delegate;
 @property (readwrite, nonatomic, strong) NSURL *documentURL;
 @property (readwrite, nonatomic, strong) CPDFDocument *document;
 
 @property (readonly, nonatomic, strong) UIPageViewController *pageViewController;
 @property (readwrite, nonatomic, strong) UIView *backgroundView;
-@property (readwrite, nonatomic, assign) BOOL magazineMode;
 @property (nonatomic) BOOL statusBarHidden;
 
 - (BOOL)openPage:(CPDFPage *)inPage;

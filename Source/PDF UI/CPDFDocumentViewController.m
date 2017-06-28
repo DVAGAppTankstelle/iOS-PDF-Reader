@@ -249,7 +249,7 @@
         // select first cell. Both things are required to get the correct behaviour.
         UICollectionViewCell *cell = [self.previewCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
         [cell setSelected:YES];
-        [self.previewCollectionView selectItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:nil];
+        [self.previewCollectionView selectItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UICollectionViewScrollPositionNone];
     });
 }
 
@@ -270,15 +270,20 @@
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [self.renderedPageCache removeAllObjects];
     [self populateCache];
+
+    if([self.delegate respondsToSelector:@selector(didChangeRotation:andThumbnailsVisible:)]) {
+        [self.delegate didChangeRotation:self.currentInterfaceOrientation andThumbnailsVisible:!self.chromeHidden];
+    }
 }
 
 - (void)hideChrome {
     if (!self.chromeHidden) {
         [UIView animateWithDuration:UINavigationControllerHideShowBarDuration animations:^{
-            self.navigationController.navigationBar.alpha = 0.0;
             self.previewCollectionView.alpha = 0.0;
         }                completion:^(BOOL finished) {
             self.chromeHidden = YES;
+
+            [self notifyDidTap];
         }];
     }
 }
@@ -286,11 +291,18 @@
 - (void)toggleChrome {
     [UIView animateWithDuration:UINavigationControllerHideShowBarDuration animations:^{
         CGFloat newAlpha = 1.0f - (self.chromeHidden ? 0.0f : 1.0f);
-        self.navigationController.navigationBar.alpha = newAlpha;
         self.previewCollectionView.alpha = newAlpha;
     }                completion:^(BOOL finished) {
         self.chromeHidden = !self.chromeHidden;
+
+        [self notifyDidTap];
     }];
+}
+
+- (void) notifyDidTap {
+    if([self.delegate respondsToSelector:@selector(didTap:)]) {
+        [self.delegate didTap:!self.chromeHidden];
+    }
 }
 
 - (void)resizePageViewControllerForOrientation:(UIInterfaceOrientation)inOrientation {
@@ -403,7 +415,7 @@
     CGRect theBounds = thePageView.bounds;
 
     for (NSInteger thePageNumber = theStartPageNumber; thePageNumber <= theLastPageNumber; ++thePageNumber) {
-        NSString *theKey = [NSString stringWithFormat:@"%d[%d,%d]", thePageNumber, (int) theBounds.size.width, (int) theBounds.size.height];
+        NSString *theKey = [NSString stringWithFormat:@"%d[%d,%d]", (int)thePageNumber, (int) theBounds.size.width, (int) theBounds.size.height];
         if ([self.renderedPageCache objectForKey:theKey] == NULL) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                 UIImage *theImage = [[self.document pageForPageNumber:thePageNumber] imageWithSize:theBounds.size scale:[UIScreen mainScreen].scale];
@@ -425,7 +437,7 @@
         return (NULL);
     }
 
-    if (theNextPageNumber == 0 && UIInterfaceOrientationIsPortrait(self.currentInterfaceOrientation)) {
+    if (theNextPageNumber == 0 && (UIInterfaceOrientationIsPortrait(self.currentInterfaceOrientation) || self.document.numberOfPages == 1)) {
         return (NULL);
     }
 

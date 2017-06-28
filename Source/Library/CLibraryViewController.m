@@ -64,7 +64,7 @@
     {
     [super viewDidLoad];
 
-        self.title = @"Library";
+        self.title = LocStringModule(@"STR_TITLE", @"iOS-PDF-Reader"); //@"Library";
 
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidOpenURL:) name:@"applicationDidOpenURL" object:NULL];
