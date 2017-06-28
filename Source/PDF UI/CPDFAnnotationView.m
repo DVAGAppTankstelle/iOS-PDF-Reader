@@ -36,6 +36,7 @@
 #import "CPDFStream.h"
 
 #import <AVKit/AVKit.h>
+#import <AVFoundation/AVFoundation.h>
 
 @interface CPDFAnnotationView ()
 @property (readwrite, nonatomic, strong) AVPlayer *moviePlayer;
